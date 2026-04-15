@@ -308,7 +308,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1.2rem;
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: auto;
             padding-right: 10px;
         }
@@ -1051,12 +1051,11 @@
                                 </div>
                             </div>
 
-                            <!-- Form Locked Message -->
+                            <!-- Form Locked -->
                             <div class="form-locked" id="loginFormLocked">
                                 <i class="fas fa-lock"></i>
                                 <h4>Akun Terkunci Sementara</h4>
-                                <p>Terlalu banyak percobaan login yang salah.</p>
-                                <p>Tunggu <span class="timer" id="loginTimer">02:00</span> menit untuk mencoba kembali.</p>
+                                <p>Terlalu banyak percobaan login gagal. Silakan tunggu <span class="timer" id="loginTimer">02:00</span> sebelum mencoba lagi.</p>
                             </div>
 
                             <button type="submit" class="submit-btn" id="loginSubmit">
@@ -1091,7 +1090,6 @@
                         </div>
 
                         <form class="auth-form" id="registerFormElement" onsubmit="handleRegister(event)">
-                            <!-- Baris 1 -->
                             <div class="input-group">
                                 <label for="regName">Nama Lengkap *</label>
                                 <input type="text" id="regName" placeholder="Nama lengkap" required>
@@ -1106,7 +1104,6 @@
                                 <div class="error-message" id="regUsernameError">Username minimal 5 karakter</div>
                             </div>
 
-                            <!-- Baris 2 -->
                             <div class="input-group">
                                 <label for="regEmail">Email *</label>
                                 <input type="email" id="regEmail" placeholder="nama@email.com" required>
@@ -1121,7 +1118,6 @@
                                 <div class="error-message" id="regPhoneError">Format nomor tidak valid</div>
                             </div>
 
-                            <!-- Baris 4 -->
                             <div class="input-group">
                                 <label for="regPassword">Password *</label>
                                 <input type="password" id="regPassword" placeholder="Minimal 8 karakter" required 
@@ -1147,7 +1143,6 @@
                                 <div class="error-message" id="regConfirmPasswordError">Password tidak cocok</div>
                             </div>
 
-                            <!-- Baris 5 - Alamat -->
                             <div class="input-group full-width">
                                 <label for="regAddress">Alamat Lengkap</label>
                                 <textarea id="regAddress" placeholder="Alamat lengkap (jalan, RT/RW, kelurahan, kecamatan, kota)" rows="3"></textarea>
@@ -1155,7 +1150,7 @@
                             </div>
 
                             <div class="form-options">
-                                <label class="checkbox-container full-width">
+                                <label class="checkbox-container">
                                     <input type="checkbox" id="termsAgreement" required>
                                     <span class="checkmark"></span>
                                     Saya setuju dengan <a href="#" onclick="showTerms()">Syarat & Ketentuan</a> dan 
@@ -1215,23 +1210,19 @@
     <script>
         // ========== GLOBAL VARIABLES ==========
         let loginAttempts = 3;
+        let loginLockTime = 120; // 2 menit dalam detik
         let isLoginLocked = false;
         let loginLockTimer = null;
-        let loginLockTime = 120; // 2 menit dalam detik
 
         // ========== FORM TOGGLE ==========
         function showLoginForm() {
-            // Update UI
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('forgotPasswordForm').style.display = 'none';
             
-            // Update toggle buttons
             document.getElementById('loginToggle').classList.add('active');
             document.getElementById('registerToggle').classList.remove('active');
-            document.getElementById('toggleBg').classList.remove('register');
             
-            // Animation
             const formContainer = document.querySelector('.form-container');
             formContainer.style.animation = 'none';
             setTimeout(() => {
@@ -1240,17 +1231,13 @@
         }
 
         function showRegisterForm() {
-            // Update UI
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'block';
             document.getElementById('forgotPasswordForm').style.display = 'none';
             
-            // Update toggle buttons
             document.getElementById('loginToggle').classList.remove('active');
             document.getElementById('registerToggle').classList.add('active');
-            document.getElementById('toggleBg').classList.add('register');
             
-            // Animation
             const formContainer = document.querySelector('.form-container');
             formContainer.style.animation = 'none';
             setTimeout(() => {
@@ -1259,16 +1246,13 @@
         }
 
         function showForgotPassword() {
-            // Update UI
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('forgotPasswordForm').style.display = 'block';
             
-            // Update toggle buttons
             document.getElementById('loginToggle').classList.remove('active');
             document.getElementById('registerToggle').classList.remove('active');
             
-            // Animation
             const formContainer = document.querySelector('.form-container');
             formContainer.style.animation = 'none';
             setTimeout(() => {
@@ -1297,26 +1281,18 @@
             const strengthBar = document.getElementById('passwordStrengthBar');
             let strength = 0;
             
-            // Reset classes
             strengthBar.className = 'strength-bar';
             
-            // Check length
             if (password.length >= 8) strength += 25;
             if (password.length >= 12) strength += 10;
-            
-            // Check character variety
             if (/[a-z]/.test(password)) strength += 20;
             if (/[A-Z]/.test(password)) strength += 20;
             if (/[0-9]/.test(password)) strength += 15;
             if (/[^A-Za-z0-9]/.test(password)) strength += 10;
             
-            // Cap at 100%
             strength = Math.min(strength, 100);
-            
-            // Update visual
             strengthBar.style.width = `${strength}%`;
             
-            // Update color based on strength
             if (strength < 40) {
                 strengthBar.classList.add('strength-weak');
             } else if (strength < 70) {
@@ -1325,7 +1301,6 @@
                 strengthBar.classList.add('strength-strong');
             }
             
-            // Validate
             const errorElement = document.getElementById('regPasswordError');
             if (password && strength < 40) {
                 errorElement.style.display = 'block';
@@ -1374,21 +1349,17 @@
             const toastMessage = document.getElementById('toastMessage');
             const toastIcon = toast.querySelector('i');
             
-            // Set content
             toastTitle.textContent = title;
             toastMessage.textContent = message;
             
-            // Set type
             toast.className = 'toast-notification';
             toast.classList.add(type);
             toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 
                                  type === 'warning' ? 'fas fa-exclamation-triangle' : 
                                  'fas fa-exclamation-circle';
             
-            // Show toast
             toast.classList.add('show');
             
-            // Auto hide after 5 seconds
             setTimeout(() => {
                 hideToast();
             }, 5000);
@@ -1401,10 +1372,16 @@
         // ========== LOGIN ATTEMPT MANAGEMENT ==========
         function updateLoginAttempts() {
             loginAttempts--;
-            document.getElementById('loginAttempts').textContent = loginAttempts;
+            const attemptsElement = document.getElementById('loginAttempts');
+            if (attemptsElement) {
+                attemptsElement.textContent = loginAttempts;
+            }
             
             if (loginAttempts > 0) {
-                document.getElementById('loginAttemptCounter').classList.add('show');
+                const counterElement = document.getElementById('loginAttemptCounter');
+                if (counterElement) {
+                    counterElement.classList.add('show');
+                }
                 showToast('error', 'Login Gagal', 
                     `Email atau password salah. ${loginAttempts} percobaan tersisa.`);
             } else {
@@ -1414,23 +1391,32 @@
 
         function lockLoginForm() {
             isLoginLocked = true;
-            document.getElementById('loginAttemptCounter').classList.remove('show');
-            document.getElementById('loginFormLocked').classList.add('show');
-            document.getElementById('loginSubmit').disabled = true;
+            const counterElement = document.getElementById('loginAttemptCounter');
+            const lockElement = document.getElementById('loginFormLocked');
+            const submitBtn = document.getElementById('loginSubmit');
             
-            // Start countdown
+            if (counterElement) counterElement.classList.remove('show');
+            if (lockElement) lockElement.classList.add('show');
+            if (submitBtn) submitBtn.disabled = true;
+            
             startLoginLockTimer();
         }
 
         function unlockLoginForm() {
             isLoginLocked = false;
             loginAttempts = 3;
-            document.getElementById('loginFormLocked').classList.remove('show');
-            document.getElementById('loginSubmit').disabled = false;
-            document.getElementById('loginAttempts').textContent = loginAttempts;
+            
+            const lockElement = document.getElementById('loginFormLocked');
+            const submitBtn = document.getElementById('loginSubmit');
+            const attemptsElement = document.getElementById('loginAttempts');
+            
+            if (lockElement) lockElement.classList.remove('show');
+            if (submitBtn) submitBtn.disabled = false;
+            if (attemptsElement) attemptsElement.textContent = loginAttempts;
             
             if (loginLockTimer) {
                 clearInterval(loginLockTimer);
+                loginLockTimer = null;
             }
             
             showToast('success', 'Akun Terbuka', 'Anda dapat mencoba login kembali.');
@@ -1438,15 +1424,19 @@
 
         function startLoginLockTimer() {
             let timeLeft = loginLockTime;
+            const timerElement = document.getElementById('loginTimer');
             
             loginLockTimer = setInterval(() => {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-                document.getElementById('loginTimer').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (timerElement) {
+                    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
                 
                 if (timeLeft <= 0) {
                     unlockLoginForm();
+                    clearInterval(loginLockTimer);
+                    loginLockTimer = null;
                 }
                 
                 timeLeft--;
@@ -1457,9 +1447,8 @@
         function handleLogin(event) {
             event.preventDefault();
             
-            // Check if form is locked
             if (isLoginLocked) {
-                showToast('error', 'Akun Terkunci', 'Tunggu 2 menit untuk mencoba login kembali.');
+                showToast('error', 'Akun Terkunci', 'Tunggu hingga waktu lock habis untuk mencoba login kembali.');
                 return;
             }
             
@@ -1495,14 +1484,13 @@
                 return;
             }
             
-            // Demo credentials for testing
+            // Demo credentials
             const demoCredentials = {
                 email: 'demo@ruangtemu.com',
                 username: 'demo',
                 password: 'Demo123!'
             };
             
-            // Check credentials
             const isEmailMatch = email === demoCredentials.email || email === demoCredentials.username;
             const isPasswordMatch = password === demoCredentials.password;
             
@@ -1524,10 +1512,19 @@
                 
                 // Reset attempts on successful login
                 loginAttempts = 3;
-                document.getElementById('loginAttemptCounter').classList.remove('show');
+                const counterElement = document.getElementById('loginAttemptCounter');
+                if (counterElement) counterElement.classList.remove('show');
                 
-                // Show success message
                 showToast('success', 'Login Berhasil', 'Selamat datang kembali di Ruang Temu Kopi!');
+                
+                // Save login state
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                } else {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userEmail', email);
+                }
                 
                 // Redirect after success
                 setTimeout(() => {
@@ -1540,7 +1537,6 @@
             event.preventDefault();
             const submitBtn = document.getElementById('registerSubmit');
             
-            // Get values
             const name = document.getElementById('regName').value.trim();
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
@@ -1550,13 +1546,9 @@
             const terms = document.getElementById('termsAgreement').checked;
             
             // Reset all error states
-            const errorElements = document.querySelectorAll('.error-message');
-            errorElements.forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.input-group').forEach(group => group.classList.remove('error'));
             
-            const inputGroups = document.querySelectorAll('.input-group');
-            inputGroups.forEach(group => group.classList.remove('error'));
-            
-            // Validation
             let isValid = true;
             let errorMessages = [];
             
@@ -1612,31 +1604,25 @@
                 return;
             }
             
-            // Show loading
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
             
-            // Simulate API call
             setTimeout(() => {
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
                 
-                // Demo: Check if email already exists
                 if (email === 'demo@ruangtemu.com') {
                     showToast('error', 'Email Sudah Terdaftar', 'Email ini sudah digunakan. Silakan gunakan email lain.');
                     return;
                 }
                 
-                // Demo: Check if username already exists
                 if (username === 'demo') {
                     showToast('error', 'Username Sudah Digunakan', 'Username ini sudah digunakan. Silakan pilih username lain.');
                     return;
                 }
                 
-                // Show success
                 showToast('success', 'Pendaftaran Berhasil', 'Selamat bergabung dengan Ruang Temu Kopi!');
                 
-                // Reset form and show login
                 setTimeout(() => {
                     document.getElementById('registerFormElement').reset();
                     document.getElementById('passwordStrengthBar').style.width = '0%';
@@ -1651,7 +1637,6 @@
             const submitBtn = document.getElementById('forgotSubmit');
             const email = document.getElementById('forgotEmail').value.trim();
             
-            // Reset error
             document.getElementById('forgotEmail').parentNode.classList.remove('error');
             document.getElementById('forgotEmailError').style.display = 'none';
             
@@ -1662,25 +1647,20 @@
                 return;
             }
             
-            // Show loading
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
             
-            // Simulate API call
             setTimeout(() => {
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
                 
-                // Demo: Check if email exists
                 if (email !== 'demo@ruangtemu.com') {
                     showToast('error', 'Email Tidak Ditemukan', 'Email ini tidak terdaftar di sistem kami.');
                     return;
                 }
                 
-                // Success
                 showToast('success', 'Link Reset Terkirim', `Link reset password telah dikirim ke ${email}. Silakan cek inbox Anda.`);
                 
-                // Return to login
                 setTimeout(() => {
                     showLoginForm();
                 }, 3000);
@@ -1696,68 +1676,22 @@
             setTimeout(() => {
                 btn.classList.remove('loading');
                 btn.disabled = false;
-                showToast('success', `Login dengan ${provider}`, 'Fitur ini dalam tahap pengembangan.');
+                showToast('info', `Login dengan ${provider}`, 'Fitur ini akan segera tersedia.');
             }, 1000);
         }
 
         // ========== TERMS & PRIVACY ==========
         function showTerms() {
-            const terms = `
-                SYARAT & KETENTUAN RUANG TEMU KOPI
+            const terms = `Syarat & Ketentuan Ruang Temu Kopi\n\n1. Keanggotaan\n- Minimal usia 17 tahun\n- Satu email untuk satu akun\n- Data harus akurat dan valid\n\n2. Hak & Kewajiban\n- Member berhak mendapatkan rewards\n- Tidak boleh menyalahgunakan akun\n- Menjaga kerahasiaan password\n\n3. Privasi\n- Data dijaga kerahasiaannya\n- Tidak dibagikan ke pihak ketiga\n- Hanya untuk keperluan layanan\n\n4. Layanan\n- Jam operasional: 08:00-23:00\n- Reservasi online 24 jam\n- Poin berlaku 1 tahun`;
             
-                1. Keanggotaan
-                - Minimal usia 17 tahun
-                - Satu email untuk satu akun
-                - Data harus akurat dan valid
-            
-                2. Hak & Kewajiban
-                - Member berhak mendapatkan rewards
-                - Tidak boleh menyalahgunakan akun
-                - Menjaga kerahasiaan password
-            
-                3. Privasi
-                - Data dijaga kerahasiaannya
-                - Tidak dibagikan ke pihak ketiga
-                - Hanya untuk keperluan layanan
-            
-                4. Layanan
-                - Jam operasional: 08:00-23:00
-                - Reservasi online 24 jam
-                - Poin berlaku 1 tahun
-            `;
-            
-            showToast('info', 'Syarat & Ketentuan', 'Silakan baca dengan seksama sebelum melanjutkan.');
+            showToast('info', 'Syarat & Ketentuan', 'Silakan baca dengan seksama.');
             setTimeout(() => {
                 alert(terms);
             }, 500);
         }
 
         function showPrivacy() {
-            const privacy = `
-                KEBIJAKAN PRIVASI
-            
-                Kami menghargai privasi Anda:
-                
-                1. Data yang dikumpulkan:
-                - Nama, email, telepon
-                - Alamat (opsional)
-                - Preferensi minuman
-                
-                2. Penggunaan data:
-                - Untuk layanan member
-                - Personalisasi pengalaman
-                - Promosi yang relevan
-                
-                3. Keamanan:
-                - Enkripsi data
-                - Firewall protection
-                - Regular security audit
-                
-                4. Hak pengguna:
-                - Akses data pribadi
-                - Permintaan penghapusan
-                - Update informasi
-            `;
+            const privacy = `Kebijakan Privasi Ruang Temu Kopi\n\n1. Data yang dikumpulkan:\n- Nama, email, telepon\n- Alamat (opsional)\n- Preferensi minuman\n\n2. Penggunaan data:\n- Untuk layanan member\n- Personalisasi pengalaman\n- Promosi yang relevan\n\n3. Keamanan:\n- Enkripsi data\n- Firewall protection\n- Regular security audit\n\n4. Hak pengguna:\n- Akses data pribadi\n- Permintaan penghapusan\n- Update informasi`;
             
             showToast('info', 'Kebijakan Privasi', 'Data Anda akan dilindungi dengan baik.');
             setTimeout(() => {
@@ -1768,21 +1702,18 @@
         // ========== REAL-TIME VALIDATION ==========
         document.addEventListener('DOMContentLoaded', function() {
             // Email validation
-            const emailInputs = document.querySelectorAll('input[type="email"]');
-            emailInputs.forEach(input => {
+            document.querySelectorAll('input[type="email"]').forEach(input => {
                 input.addEventListener('blur', function() {
                     if (this.value && !validateEmail(this.value)) {
                         this.parentNode.classList.add('error');
                         const errorId = this.id + 'Error';
-                        if (document.getElementById(errorId)) {
-                            document.getElementById(errorId).style.display = 'block';
-                        }
-                    } else {
+                        const errorEl = document.getElementById(errorId);
+                        if (errorEl) errorEl.style.display = 'block';
+                    } else if (this.value) {
                         this.parentNode.classList.remove('error');
                         const errorId = this.id + 'Error';
-                        if (document.getElementById(errorId)) {
-                            document.getElementById(errorId).style.display = 'none';
-                        }
+                        const errorEl = document.getElementById(errorId);
+                        if (errorEl) errorEl.style.display = 'none';
                     }
                 });
             });
@@ -1794,7 +1725,7 @@
                     if (this.value && !validatePhone(this.value)) {
                         this.parentNode.classList.add('error');
                         document.getElementById('regPhoneError').style.display = 'block';
-                    } else {
+                    } else if (this.value) {
                         this.parentNode.classList.remove('error');
                         document.getElementById('regPhoneError').style.display = 'none';
                     }
@@ -1808,7 +1739,7 @@
                     if (this.value && !validateUsername(this.value)) {
                         this.parentNode.classList.add('error');
                         document.getElementById('regUsernameError').style.display = 'block';
-                    } else {
+                    } else if (this.value) {
                         this.parentNode.classList.remove('error');
                         document.getElementById('regUsernameError').style.display = 'none';
                     }
@@ -1816,15 +1747,13 @@
             }
 
             // Real-time input validation
-            const inputs = document.querySelectorAll('input[required], select[required]');
-            inputs.forEach(input => {
+            document.querySelectorAll('input[required], select[required]').forEach(input => {
                 input.addEventListener('input', function() {
                     if (this.value) {
                         this.parentNode.classList.remove('error');
                         const errorId = this.id + 'Error';
-                        if (document.getElementById(errorId)) {
-                            document.getElementById(errorId).style.display = 'none';
-                        }
+                        const errorEl = document.getElementById(errorId);
+                        if (errorEl) errorEl.style.display = 'none';
                     }
                 });
             });
