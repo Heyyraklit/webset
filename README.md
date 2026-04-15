@@ -1,1 +1,1 @@
-https://Heyyraklit.github.io/webset/
+https://github.com/Heyyraklit/webset.git
