@@ -1,1 +1,1 @@
-ruangtemu.free.nf
+https://ruangtemu.free.nf/index.html
